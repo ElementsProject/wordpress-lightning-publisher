@@ -1,0 +1,10 @@
+{
+    "name": "elementsproject/wordpress-paywall",
+    "description": "WordPress Lightning Paywall",
+    "version": "0.1.0",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {
+        "elementsproject/lightning-strike-client-php": "dev-master"
+    }
+}
