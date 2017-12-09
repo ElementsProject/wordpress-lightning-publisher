@@ -1,0 +1,47 @@
+.paywall-pay, .paywall-paid {
+  padding: 1em;
+  border-radius: 2px;
+  background: #FBFCD0;
+}
+
+.paywall-pay {
+  text-align: center; /* @XXX good for paid too? */
+}
+
+.paywall-paid p {
+  margin-bottom: 0.5em;
+}
+.paywall-paid p:last-child {
+  margin-bottom: 0;
+}
+
+.paywall-btn {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  padding: 8px 12px;
+
+  font-size: 20px;
+  line-height: 1.4;
+  border-radius: 2px;
+
+  color: #ffffff !important;
+  background-color: #008cba !important;
+  border-color: #0079a1 !important;
+
+}
+
+.paywall-btn[disabled] {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.ln-paywall-frame {
+  display: block;
+  border: none;
+  overflow: none;
+  width: 100%;
+  height: 400px;
+}
