@@ -8,12 +8,9 @@
     Author URI:  https://blockstream.com
 */
 
-if (!defined('ABSPATH')) {
-  exit;
-}
+if (!defined('ABSPATH')) exit;
 
 require_once 'vendor/autoload.php';
-
 define('LIGHTNING_PAYWALL_KEY', hash_hmac('sha256', 'lightning-paywall-token', AUTH_KEY));
 
 class Lightning_Paywall {
@@ -34,7 +31,6 @@ class Lightning_Paywall {
     // admin
     add_action('admin_init', array($this, 'admin_init'));
     add_action('admin_menu', array($this, 'admin_menu'));
-
   }
 
   /**
@@ -44,12 +40,10 @@ class Lightning_Paywall {
     $paywall = self::extract_paywall_tag($content);
     if (!$paywall) return $content;
 
-    $post = get_post();
     list($public, $protected) = explode($paywall->tag, $content, 2);
 
-    if (self::check_payment($post->ID)) return self::format_paid($post->ID, $paywall, $public, $protected);
-    else return self::format_unpaid($post->ID, $paywall, $public);
-
+    return self::check_payment($post->ID) ? self::format_paid(get_the_ID(), $paywall, $public, $protected)
+                                          : self::format_unpaid(get_the_ID(), $paywall, $public);
   }
 
   /**
@@ -79,7 +73,6 @@ class Lightning_Paywall {
       'metadata'    => [ 'post_id' => $post_id ]
     ]);
 
-    status_header(201);
     wp_send_json($invoice->id, 201);
   }
 
@@ -104,7 +97,7 @@ class Lightning_Paywall {
    * Create HMAC tokens granting access to $post_id
    * @param int $post_id
    * @return str base36 token
-   * @TODO expiry time, link with invoice
+   * @TODO expiry time, link token to invoice
    */
   protected static function make_token($post_id) {
     return base_convert(hash_hmac('sha256', $post_id, LIGHTNING_PAYWALL_KEY), 16, 36);
@@ -126,7 +119,6 @@ class Lightning_Paywall {
    * @param string $content
    * @return array
    */
-
   protected static function extract_paywall_tag($content) {
     if (!preg_match('/\[paywall [\d.]+ [a-z]+.*?\]/i', $content, $m)) return;
     $tag = html_entity_decode(str_replace('&#8221;', '"', $m[0]));
@@ -156,21 +148,14 @@ class Lightning_Paywall {
     return sprintf('%s<div class="paywall-pay">%s%s</div>', $public, $text, $button);
   }
 
-
-
   /**
    * Admin settings page
    */
 
   public function admin_menu() {
-    add_options_page('Lightning Paywall Settings',
-        'Lightning Paywall',
-        'manage_options',
-        'ln_paywall',
-        array($this, 'admin_page')
-    );
+    add_options_page('Lightning Paywall Settings', 'Lightning Paywall',
+                     'manage_options', 'ln_paywall', array($this, 'admin_page'));
   }
-
   public function admin_init() {
     register_setting('ln_paywall', 'ln_paywall');
     add_settings_section('ln_paywall_server', 'Lightning Strike Server', null, 'ln_paywall');
@@ -179,7 +164,6 @@ class Lightning_Paywall {
     add_settings_field('ln_paywall_server_public_url', 'Public URL', array($this, 'field_public_url'), 'ln_paywall', 'ln_paywall_server');
     add_settings_field('ln_paywall_token', 'API token', array($this, 'field_token'), 'ln_paywall', 'ln_paywall_server');
   }
-
   public function admin_page() {
     ?>
     <div class="wrap">
@@ -195,16 +179,13 @@ class Lightning_Paywall {
     <?php
   }
   public function field_server_url(){
-    printf('<input type="text" id="ln_paywall_server" name="ln_paywall[server_url]" value="%s" />',
-      esc_attr( $this->options['server_url']));
+    printf('<input type="text" name="ln_paywall[server_url]" value="%s" />', esc_attr($this->options['server_url']));
   }
   public function field_public_url(){
-    printf('<input type="text" id="ln_paywall_public" name="ln_paywall[public_url]" value="%s" />',
-      esc_attr( $this->options['public_url']));
+    printf('<input type="text" name="ln_paywall[public_url]" value="%s" />', esc_attr($this->options['public_url']));
   }
   public function field_token(){
-    printf('<input type="text" id="ln_paywall_public" name="ln_paywall[api_token]" value="%s" />',
-      esc_attr( $this->options['api_token']));
+    printf('<input type="text" name="ln_paywall[api_token]" value="%s" />', esc_attr($this->options['api_token']));
   }
 }
 
