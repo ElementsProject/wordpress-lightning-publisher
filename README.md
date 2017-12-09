@@ -1,12 +1,10 @@
 # Lightning Paywall for WordPress
 
-### Demo
-
 ![Paywall demo](https://i.imgur.com/7uaQ2Ow.gif)
 
 ### Setup
 
-1. [Download wordpress-lightning-paywall.zip](https://github.com/shesek/wordpress-lightning-paywall/releases/download/latest/wordpress-lightning-paywall.zip)
+1. [Download wordpress-lightning-paywall.zip](https://github.com/shesek/wordpress-lightning-paywall/releases)
 
 2. Install and enable the plugin on your WordPress installation.
 
