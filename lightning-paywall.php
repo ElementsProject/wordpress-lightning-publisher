@@ -43,7 +43,7 @@ class Lightning_Paywall {
     $post_id = get_the_ID();
     list($public, $protected) = explode($paywall->tag, $content, 2);
 
-    return self::check_payment($post_ID) ? self::format_paid($post_id, $paywall, $public, $protected)
+    return self::check_payment($post_id) ? self::format_paid($post_id, $paywall, $public, $protected)
                                          : self::format_unpaid($post_id, $paywall, $public);
   }
 
