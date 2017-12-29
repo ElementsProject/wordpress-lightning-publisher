@@ -16,7 +16,7 @@ define('LIGHTNING_PAYWALL_KEY', hash_hmac('sha256', 'lightning-paywall-token', A
 class Lightning_Paywall {
   public function __construct() {
     $this->options = get_option('ln_paywall');
-    $this->strike = new LightningStrikeClient($this->options['server_url'], $this->options['api_token']);
+    $this->charge = new LightningChargeClient($this->options['server_url'], $this->options['api_token']);
 
     // frontend
     add_action('wp_enqueue_scripts', array($this, 'enqueue_script'));
@@ -55,7 +55,7 @@ class Lightning_Paywall {
     wp_enqueue_style('ln-paywall', plugins_url('css/paywall.css', __FILE__));
     wp_localize_script('ln-paywall', 'LN_paywall', array(
       'ajax_url'   => admin_url('admin-ajax.php'),
-      'strike_url' => !empty($this->options['public_url']) ? $this->options['public_url'] : $this->options['server_url']
+      'charge_url' => !empty($this->options['public_url']) ? $this->options['public_url'] : $this->options['server_url']
     ));
   }
 
@@ -67,7 +67,7 @@ class Lightning_Paywall {
     $paywall = self::extract_paywall_tag(get_post_field('post_content', $post_id));
     if (!$paywall) return status_header(404);
 
-    $invoice = $this->strike->invoice([
+    $invoice = $this->charge->invoice([
       'currency'    => $paywall->currency,
       'amount'      => $paywall->amount,
       'description' => get_bloginfo('name') . ': pay to continue reading ' . get_the_title($post_id),
@@ -82,7 +82,7 @@ class Lightning_Paywall {
    * @TODO persist to cookie?
    */
   public function ajax_make_token() {
-    $invoice = $this->strike->fetch($_POST['invoice_id']);
+    $invoice = $this->charge->fetch($_POST['invoice_id']);
 
     if (!$invoice)                    return status_header(404);
     if (!$invoice->completed)         return status_header(402);
@@ -160,7 +160,7 @@ class Lightning_Paywall {
   }
   public function admin_init() {
     register_setting('ln_paywall', 'ln_paywall');
-    add_settings_section('ln_paywall_server', 'Lightning Strike Server', null, 'ln_paywall');
+    add_settings_section('ln_paywall_server', 'Lightning Charge Server', null, 'ln_paywall');
 
     add_settings_field('ln_paywall_server_url', 'URL', array($this, 'field_server_url'), 'ln_paywall', 'ln_paywall_server');
     add_settings_field('ln_paywall_server_public_url', 'Public URL', array($this, 'field_public_url'), 'ln_paywall', 'ln_paywall_server');

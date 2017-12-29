@@ -8,7 +8,7 @@
 
 2. Install and enable the plugin on your WordPress installation.
 
-3. Under the WordPress administration panel, go to `Settings -> Lightning Paywall` to configure your Lightning Strike server URL and API token.
+3. Under the WordPress administration panel, go to `Settings -> Lightning Paywall` to configure your Lightning Charge server URL and API token.
 
 
 ### Usage

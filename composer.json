@@ -5,6 +5,6 @@
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
-        "elementsproject/lightning-strike-client-php": "dev-master"
+        "elementsproject/lightning-charge-client-php": "^0.1.3"
     }
 }

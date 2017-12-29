@@ -1,7 +1,7 @@
 jQuery(function($) {
   var ajax_url      = LN_paywall.ajax_url
-    , strike_url    = LN_paywall.strike_url
-    , strike_origin = $('<a>').attr('href', strike_url)[0].origin
+    , charge_url    = LN_paywall.charge_url
+    , charge_origin = $('<a>').attr('href', charge_url)[0].origin
 
   function show_pay(post_id, target) {
     $.post(ajax_url, { action: 'ln_paywall_invoice', post_id: post_id})
@@ -17,7 +17,7 @@ jQuery(function($) {
 
   function pay_frame(invoice_id) {
     return $('<iframe>').addClass('ln-paywall-frame')
-      .attr('src', strike_url + '/checkout/' + invoice_id)
+      .attr('src', charge_url + '/checkout/' + invoice_id)
   }
 
   $('[data-paywall-postid]').click(function(e) {
@@ -29,7 +29,7 @@ jQuery(function($) {
 
   $(window).on('message', function(ev) {
     var ov = ev.originalEvent
-    if (ov.origin !== strike_origin) return;
+    if (ov.origin !== charge_origin) return;
     switch (ov.data.type) {
       case 'height':    $('.ln-paywall-frame').height(ov.data.value); break
       case 'completed': get_access(ov.data.invoice); break
