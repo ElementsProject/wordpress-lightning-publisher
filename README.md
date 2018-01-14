@@ -1,17 +1,21 @@
 # Lightning Paywall for WordPress
 
+Lightning-powered paywall for your WordPress blog, based on [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
+
 ![Paywall demo](https://i.imgur.com/7uaQ2Ow.gif)
 
-### Setup
+## Installation
 
-1. [Download wordpress-lightning-paywall.zip](https://github.com/shesek/wordpress-lightning-paywall/releases)
+1. Setup [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
 
-2. Install and enable the plugin on your WordPress installation.
+2. [Download wordpress-lightning-paywall.zip](https://github.com/shesek/wordpress-lightning-paywall/releases)
 
-3. Under the WordPress administration panel, go to `Settings -> Lightning Paywall` to configure your Lightning Charge server URL and API token.
+3. Install and enable the plugin on your WordPress installation.
+
+4. Under the WordPress administration panel, go to `Settings -> Lightning Paywall` to configure your Lightning Charge server URL and API token.
 
 
-### Usage
+## Usage
 
 Add `[paywall AMOUNT CURRENCY]` in the place where you'd like the post to cut-off for non-paying users.
 
@@ -30,6 +34,6 @@ This will look something like: `http://some.blog/trusted-third-parties-are-secur
 
 Note that anyone with this URL will be able to access the content. There are currently no restrictions in place to prevent links from being shared.
 
-### License
+## License
 
 MIT
