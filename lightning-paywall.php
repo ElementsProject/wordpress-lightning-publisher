@@ -71,7 +71,7 @@ class Lightning_Paywall {
       'currency'    => $paywall->currency,
       'amount'      => $paywall->amount,
       'description' => get_bloginfo('name') . ': pay to continue reading ' . get_the_title($post_id),
-      'metadata'    => [ 'post_id' => $post_id ]
+      'metadata'    => [ 'source' => 'wordpress-lightning-paywall', 'post_id' => $post_id, 'url' => get_permalink($post_id) ]
     ]);
 
     wp_send_json($invoice->id, 201);
