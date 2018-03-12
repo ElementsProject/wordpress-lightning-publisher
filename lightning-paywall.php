@@ -1,7 +1,7 @@
 <?php
 /*
     Plugin Name: Lightning Paywall
-    Version:     0.1.2
+    Version:     0.1.4
     Plugin URI:  https://github.com/ElementsProject/wordpress-lightning-paywall
     Description: Lightning paywall for WordPress posts
     Author:      Blockstream
