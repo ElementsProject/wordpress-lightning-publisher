@@ -1,6 +1,8 @@
 # Lightning Publisher for WordPress
 
-Lightning Publisher for your WordPress blog, based on [Lightning Charge](https://github.com/ElementsProject/lightning-charge), allows you to offer previews of your work, then release the rest with a Lightning Network payment.
+Lightning Publisher for your WordPress blog allows you to offer previews of your work, then to release the rest with a Lightning Network payment.
+
+Powered by :zap: [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
 
 ![Publisher demo](https://i.imgur.com/7uaQ2Ow.gif)
 
