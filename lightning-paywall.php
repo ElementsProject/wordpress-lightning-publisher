@@ -1,9 +1,9 @@
 <?php
 /*
-    Plugin Name: Lightning Paywall
+    Plugin Name: Lightning Publisher
     Version:     0.1.4
-    Plugin URI:  https://github.com/ElementsProject/wordpress-lightning-paywall
-    Description: Lightning paywall for WordPress posts
+    Plugin URI:  https://github.com/ElementsProject/wordpress-lightning-publisher
+    Description: Lightning Publisher for WordPress
     Author:      Blockstream
     Author URI:  https://blockstream.com
 */
@@ -11,11 +11,11 @@
 if (!defined('ABSPATH')) exit;
 
 require_once 'vendor/autoload.php';
-define('LIGHTNING_PAYWALL_KEY', hash_hmac('sha256', 'lightning-paywall-token', AUTH_KEY));
+define('LIGHTNING_PUBLISHER_KEY', hash_hmac('sha256', 'lightning-publisher-token', AUTH_KEY));
 
-class Lightning_Paywall {
+class Lightning_Publisher {
   public function __construct() {
-    $this->options = get_option('ln_paywall');
+    $this->options = get_option('ln_publisher');
     $this->charge = new LightningChargeClient($this->options['server_url'], $this->options['api_token']);
 
     // frontend
@@ -23,10 +23,10 @@ class Lightning_Paywall {
     add_filter('the_content',        array($this, 'paywall_filter'));
 
     // ajax
-    add_action('wp_ajax_ln_paywall_invoice',        array($this, 'ajax_make_invoice'));
-    add_action('wp_ajax_nopriv_ln_paywall_invoice', array($this, 'ajax_make_invoice'));
-    add_action('wp_ajax_ln_paywall_token',          array($this, 'ajax_make_token'));
-    add_action('wp_ajax_nopriv_ln_paywall_token',   array($this, 'ajax_make_token'));
+    add_action('wp_ajax_ln_publisher_invoice',        array($this, 'ajax_make_invoice'));
+    add_action('wp_ajax_nopriv_ln_publisher_invoice', array($this, 'ajax_make_invoice'));
+    add_action('wp_ajax_ln_publisher_token',          array($this, 'ajax_make_token'));
+    add_action('wp_ajax_nopriv_ln_publisher_token',   array($this, 'ajax_make_token'));
 
     // admin
     add_action('admin_init', array($this, 'admin_init'));
@@ -51,9 +51,9 @@ class Lightning_Paywall {
    * Register scripts and styles
    */
   public function enqueue_script() {
-    wp_enqueue_script('ln-paywall', plugins_url('js/paywall.js', __FILE__), array('jquery'));
-    wp_enqueue_style('ln-paywall', plugins_url('css/paywall.css', __FILE__));
-    wp_localize_script('ln-paywall', 'LN_paywall', array(
+    wp_enqueue_script('ln-publisher', plugins_url('js/publisher.js', __FILE__), array('jquery'));
+    wp_enqueue_style('ln-publisher', plugins_url('css/publisher.css', __FILE__));
+    wp_localize_script('ln-publisher', 'LN_publisher', array(
       'ajax_url'   => admin_url('admin-ajax.php'),
       'charge_url' => !empty($this->options['public_url']) ? $this->options['public_url'] : $this->options['server_url']
     ));
@@ -71,7 +71,7 @@ class Lightning_Paywall {
       'currency'    => $paywall->currency,
       'amount'      => $paywall->amount,
       'description' => get_bloginfo('name') . ': pay to continue reading ' . get_the_title($post_id),
-      'metadata'    => [ 'source' => 'wordpress-lightning-paywall', 'post_id' => $post_id, 'url' => get_permalink($post_id) ]
+      'metadata'    => [ 'source' => 'wordpress-lightning-publisher', 'post_id' => $post_id, 'url' => get_permalink($post_id) ]
     ]);
 
     wp_send_json($invoice->id, 201);
@@ -90,7 +90,7 @@ class Lightning_Paywall {
 
     $post_id = $invoice->metadata->post_id;
     $token   = self::make_token($post_id);
-    $url     = add_query_arg('paywall_access', $token, get_permalink($post_id));
+    $url     = add_query_arg('publisher_access', $token, get_permalink($post_id));
 
     wp_send_json([ 'post_id' => $post_id, 'token' => $token, 'url' => $url ]);
   }
@@ -102,7 +102,7 @@ class Lightning_Paywall {
    * @TODO expiry time, link token to invoice
    */
   protected static function make_token($post_id) {
-    return base_convert(hash_hmac('sha256', $post_id, LIGHTNING_PAYWALL_KEY), 16, 36);
+    return base_convert(hash_hmac('sha256', $post_id, LIGHTNING_PUBLISHER_KEY), 16, 36);
   }
 
 
@@ -112,7 +112,7 @@ class Lightning_Paywall {
    * @return bool
    */
   protected static function check_payment($post_id) {
-    return isset($_GET['paywall_access']) && self::make_token($post_id) === $_GET['paywall_access'];
+    return isset($_GET['publisher_access']) && self::make_token($post_id) === $_GET['publisher_access'];
   }
 
   /**
@@ -136,7 +136,7 @@ class Lightning_Paywall {
     $text = isset($paywall->attrs['thanks']) ? $paywall->attrs['thanks']
       : "<p>Thank you for paying! The rest of the post is available below.</p><p>To return to this content later, please add this page to your bookmarks (Ctrl-d).</p>";
 
-    return sprintf('%s<div class="paywall-paid" id="paid">%s</div>%s', $public, $text, $protected);
+    return sprintf('%s<div class="ln-publisher-paid" id="paid">%s</div>%s', $public, $text, $protected);
   }
 
   /**
@@ -145,9 +145,9 @@ class Lightning_Paywall {
   protected static function format_unpaid($post_id, $paywall, $public) {
     $attrs  = $paywall->attrs;
     $text   = '<p>' . sprintf(!isset($attrs['text']) ? 'To continue reading the rest of this post, please pay <em>%s</em>.' : $attrs['text'], $paywall->amount . ' ' . $paywall->currency).'</p>';
-    $button = sprintf('<a class="paywall-btn" href="#" data-paywall-postid="%d">%s</a>', $post_id, !isset($attrs['button']) ? 'Pay to continue reading' : $attrs['button']);
+    $button = sprintf('<a class="ln-publisher-btn" href="#" data-publisher-postid="%d">%s</a>', $post_id, !isset($attrs['button']) ? 'Pay to continue reading' : $attrs['button']);
 
-    return sprintf('%s<div class="paywall-pay">%s%s</div>', $public, $text, $button);
+    return sprintf('%s<div class="ln-publisher-pay">%s%s</div>', $public, $text, $button);
   }
 
   /**
@@ -155,25 +155,25 @@ class Lightning_Paywall {
    */
 
   public function admin_menu() {
-    add_options_page('Lightning Paywall Settings', 'Lightning Paywall',
-                     'manage_options', 'ln_paywall', array($this, 'admin_page'));
+    add_options_page('Lightning Publisher Settings', 'Lightning Publisher',
+                     'manage_options', 'ln_publisher', array($this, 'admin_page'));
   }
   public function admin_init() {
-    register_setting('ln_paywall', 'ln_paywall');
-    add_settings_section('ln_paywall_server', 'Lightning Charge Server', null, 'ln_paywall');
+    register_setting('ln_publisher', 'ln_publisher');
+    add_settings_section('ln_publisher_server', 'Lightning Charge Server', null, 'ln_publisher');
 
-    add_settings_field('ln_paywall_server_url', 'URL', array($this, 'field_server_url'), 'ln_paywall', 'ln_paywall_server');
-    add_settings_field('ln_paywall_server_public_url', 'Public URL', array($this, 'field_public_url'), 'ln_paywall', 'ln_paywall_server');
-    add_settings_field('ln_paywall_token', 'API token', array($this, 'field_token'), 'ln_paywall', 'ln_paywall_server');
+    add_settings_field('ln_publisher_server_url', 'URL', array($this, 'field_server_url'), 'ln_publisher', 'ln_publisher_server');
+    add_settings_field('ln_publisher_server_public_url', 'Public URL', array($this, 'field_public_url'), 'ln_publisher', 'ln_publisher_server');
+    add_settings_field('ln_publisher_token', 'API token', array($this, 'field_token'), 'ln_publisher', 'ln_publisher_server');
   }
   public function admin_page() {
     ?>
     <div class="wrap">
-        <h1>Lightning Paywall Settings</h1>
+        <h1>Lightning Publisher Settings</h1>
         <form method="post" action="options.php">
         <?php
-            settings_fields('ln_paywall');
-            do_settings_sections('ln_paywall');
+            settings_fields('ln_publisher');
+            do_settings_sections('ln_publisher');
             submit_button();
         ?>
         </form>
@@ -181,14 +181,14 @@ class Lightning_Paywall {
     <?php
   }
   public function field_server_url(){
-    printf('<input type="text" name="ln_paywall[server_url]" value="%s" />', esc_attr($this->options['server_url']));
+    printf('<input type="text" name="ln_publisher[server_url]" value="%s" />', esc_attr($this->options['server_url']));
   }
   public function field_public_url(){
-    printf('<input type="text" name="ln_paywall[public_url]" value="%s" />', esc_attr($this->options['public_url']));
+    printf('<input type="text" name="ln_publisher[public_url]" value="%s" />', esc_attr($this->options['public_url']));
   }
   public function field_token(){
-    printf('<input type="text" name="ln_paywall[api_token]" value="%s" />', esc_attr($this->options['api_token']));
+    printf('<input type="text" name="ln_publisher[api_token]" value="%s" />', esc_attr($this->options['api_token']));
   }
 }
 
-new Lightning_Paywall();
+new Lightning_Publisher();

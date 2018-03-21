@@ -1,21 +1,21 @@
-.paywall-pay, .paywall-paid {
+.ln-publisher-pay, .ln-publisher-paid {
   padding: 1em;
   border-radius: 2px;
   background: #FBFCD0;
 }
 
-.paywall-pay {
+.ln-publisher-pay {
   text-align: center; /* @XXX good for paid too? */
 }
 
-.paywall-paid p {
+.ln-publisher-paid p {
   margin-bottom: 0.5em;
 }
-.paywall-paid p:last-child {
+.ln-publisher-paid p:last-child {
   margin-bottom: 0;
 }
 
-.paywall-btn {
+.ln-publisher-btn {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
@@ -32,13 +32,13 @@
 
 }
 
-.paywall-btn[disabled] {
+.ln-publisher-btn[disabled] {
   pointer-events: none;
   cursor: not-allowed;
   opacity: 0.4;
 }
 
-.ln-paywall-frame {
+.ln-publisher-frame {
   display: block;
   border: none;
   overflow: none;
