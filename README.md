@@ -1,6 +1,6 @@
 # Lightning Publisher for WordPress
 
-Lightning-powered paywall for your WordPress blog, based on [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
+Lightning Publisher for your WordPress blog, based on [Lightning Charge](https://github.com/ElementsProject/lightning-charge), allows you to offer previews of your work, then release the rest with a Lightning Network payment.
 
 ![Publisher demo](https://i.imgur.com/7uaQ2Ow.gif)
 
