@@ -130,7 +130,7 @@ class Lightning_Publisher {
   }
 
   /**
-   * Format display for unpaid post
+   * Format display for paid post
    */
   protected static function format_paid($post_id, $ifpaid, $public, $protected) {
     $text = isset($ifpaid->attrs['thanks']) ? $ifpaid->attrs['thanks']
@@ -140,7 +140,7 @@ class Lightning_Publisher {
   }
 
   /**
-   * Format display for paid post
+   * Format display for unpaid post
    */
   protected static function format_unpaid($post_id, $ifpaid, $public) {
     $attrs  = $ifpaid->attrs;
