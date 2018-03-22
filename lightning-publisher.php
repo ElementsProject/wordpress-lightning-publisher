@@ -20,7 +20,7 @@ class Lightning_Publisher {
 
     // frontend
     add_action('wp_enqueue_scripts', array($this, 'enqueue_script'));
-    add_filter('the_content',        array($this, 'paywall_filter'));
+    add_filter('the_content',        array($this, 'ifpaid_filter'));
 
     // ajax
     add_action('wp_ajax_ln_publisher_invoice',        array($this, 'ajax_make_invoice'));
@@ -34,17 +34,17 @@ class Lightning_Publisher {
   }
 
   /**
-   * Process [paywall] tags in post content
+   * Process [ifpaid] tags in post content
    */
-  public function paywall_filter($content) {
-    $paywall = self::extract_paywall_tag($content);
-    if (!$paywall) return $content;
+  public function ifpaid_filter($content) {
+    $ifpaid = self::extract_ifpaid_tag($content);
+    if (!$ifpaid) return $content;
 
     $post_id = get_the_ID();
-    list($public, $protected) = preg_split('/(<p>)?' . preg_quote($paywall->tag, '/') . '(<\/p>)?/', $content, 2);
+    list($public, $protected) = preg_split('/(<p>)?' . preg_quote($ifpaid->tag, '/') . '(<\/p>)?/', $content, 2);
 
-    return self::check_payment($post_id) ? self::format_paid($post_id, $paywall, $public, $protected)
-                                         : self::format_unpaid($post_id, $paywall, $public);
+    return self::check_payment($post_id) ? self::format_paid($post_id, $ifpaid, $public, $protected)
+                                         : self::format_unpaid($post_id, $ifpaid, $public);
   }
 
   /**
@@ -64,12 +64,12 @@ class Lightning_Publisher {
    */
   public function ajax_make_invoice() {
     $post_id = (int)$_POST['post_id'];
-    $paywall = self::extract_paywall_tag(get_post_field('post_content', $post_id));
-    if (!$paywall) return status_header(404);
+    $ifpaid = self::extract_ifpaid_tag(get_post_field('post_content', $post_id));
+    if (!$ifpaid) return status_header(404);
 
     $invoice = $this->charge->invoice([
-      'currency'    => $paywall->currency,
-      'amount'      => $paywall->amount,
+      'currency'    => $ifpaid->currency,
+      'amount'      => $ifpaid->amount,
       'description' => get_bloginfo('name') . ': pay to continue reading ' . get_the_title($post_id),
       'metadata'    => [ 'source' => 'wordpress-lightning-publisher', 'post_id' => $post_id, 'url' => get_permalink($post_id) ]
     ]);
@@ -116,13 +116,13 @@ class Lightning_Publisher {
   }
 
   /**
-   * Parse [paywall] tags and return as structured data
-   * Expected format: [paywall AMOUNT CURRENCY KEY=VAL]
+   * Parse [ifpaid] tags and return as structured data
+   * Expected format: [ifpaid AMOUNT CURRENCY KEY=VAL]
    * @param string $content
    * @return array
    */
-  protected static function extract_paywall_tag($content) {
-    if (!preg_match('/\[paywall [\d.]+ [a-z]+.*?\]/i', $content, $m)) return;
+  protected static function extract_ifpaid_tag($content) {
+    if (!preg_match('/\[ifpaid [\d.]+ [a-z]+.*?\]/i', $content, $m)) return;
     $tag = html_entity_decode(str_replace('&#8221;', '"', $m[0]));
     if (substr($tag, -2, 1) !== ' ') $tag = substr($tag, 0, -1) . ' ]';
     $attrs = shortcode_parse_atts($tag);
@@ -130,21 +130,21 @@ class Lightning_Publisher {
   }
 
   /**
-   * Format display for paywalled, unpaid post
+   * Format display for unpaid post
    */
-  protected static function format_paid($post_id, $paywall, $public, $protected) {
-    $text = isset($paywall->attrs['thanks']) ? $paywall->attrs['thanks']
+  protected static function format_paid($post_id, $ifpaid, $public, $protected) {
+    $text = isset($ifpaid->attrs['thanks']) ? $ifpaid->attrs['thanks']
       : "<p>Thank you for paying! The rest of the post is available below.</p><p>To return to this content later, please add this page to your bookmarks (Ctrl-d).</p>";
 
     return sprintf('%s<div class="ln-publisher-paid" id="paid">%s</div>%s', $public, $text, $protected);
   }
 
   /**
-   * Format display for paywalled, paid post
+   * Format display for paid post
    */
-  protected static function format_unpaid($post_id, $paywall, $public) {
-    $attrs  = $paywall->attrs;
-    $text   = '<p>' . sprintf(!isset($attrs['text']) ? 'To continue reading the rest of this post, please pay <em>%s</em>.' : $attrs['text'], $paywall->amount . ' ' . $paywall->currency).'</p>';
+  protected static function format_unpaid($post_id, $ifpaid, $public) {
+    $attrs  = $ifpaid->attrs;
+    $text   = '<p>' . sprintf(!isset($attrs['text']) ? 'To continue reading the rest of this post, please pay <em>%s</em>.' : $attrs['text'], $ifpaid->amount . ' ' . $ifpaid->currency).'</p>';
     $button = sprintf('<a class="ln-publisher-btn" href="#" data-publisher-postid="%d">%s</a>', $post_id, !isset($attrs['button']) ? 'Pay to continue reading' : $attrs['button']);
 
     return sprintf('%s<div class="ln-publisher-pay">%s%s</div>', $public, $text, $button);
