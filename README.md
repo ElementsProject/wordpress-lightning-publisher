@@ -10,7 +10,7 @@ Powered by :zap: [Lightning Charge](https://github.com/ElementsProject/lightning
 
 1. Setup [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
 
-2. [Download wordpress-lightning-publisher.zip](https://github.com/shesek/wordpress-lightning-publisher/releases)
+2. [Download wordpress-lightning-publisher.zip](https://github.com/elementsproject/wordpress-lightning-publisher/releases)
 
 3. Install and enable the plugin on your WordPress installation.
 
@@ -23,7 +23,7 @@ Add `[ifpaid AMOUNT CURRENCY]` in the place that marks the beginning of paid acc
 
 For example: `[ifpaid 0.0005 USD]` or `[ifpaid 0.00000005 BTC]`. All the currencies on BitcoinAverage are supported. BTC amounts can have up to 11 decimal places (milli-satoshis precision).
 
-![Editor example](https://i.imgur.com/sqmE5VL.png)
+![Editor example](https://i.imgur.com/OfFS8XC.png)
 
 You may also specify a custom message and button text, as follows: `[ifpaid 0.005 ILS text="Please pay to continue reading." button="Alright, I'll pay!"]`. This will show up as:
 
