@@ -4,7 +4,7 @@ Lightning Publisher for WordPress allows you to offer previews of your blog post
 
 Powered by :zap: [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
 
-![Publisher demo](https://i.imgur.com/7uaQ2Ow.gif)
+![Publisher demo](https://i.imgur.com/xaFSa4E.gif)
 
 ## Installation
 
