@@ -1,5 +1,9 @@
 # Lightning Publisher for WordPress
 
+[![MIT license](https://img.shields.io/github/license/elementsproject/wordpress-lightning-publisher.svg)](https://github.com/elementsproject/wordpress-lightning-publisher/blob/master/LICENSE)
+[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![IRC](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://webchat.freenode.net/?channels=lightning-charge)
+
 Lightning Publisher for WordPress allows you to offer previews of your blog posts and require a Lightning Network payment to release the rest.
 
 Powered by :zap: [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
