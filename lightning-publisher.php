@@ -162,7 +162,7 @@ class Lightning_Publisher {
     register_setting('ln_publisher', 'ln_publisher');
     add_settings_section('ln_publisher_server', 'Lightning Charge Server', null, 'ln_publisher');
 
-    add_settings_field('ln_publisher_server_url', 'URL', array($this, 'field_server_url'), 'ln_publisher', 'ln_publisher_server');
+    add_settings_field('ln_publisher_server_url', 'Server URL', array($this, 'field_server_url'), 'ln_publisher', 'ln_publisher_server');
     add_settings_field('ln_publisher_server_public_url', 'Public URL', array($this, 'field_public_url'), 'ln_publisher', 'ln_publisher_server');
     add_settings_field('ln_publisher_token', 'API token', array($this, 'field_token'), 'ln_publisher', 'ln_publisher_server');
   }
@@ -184,7 +184,8 @@ class Lightning_Publisher {
     printf('<input type="text" name="ln_publisher[server_url]" value="%s" />', esc_attr($this->options['server_url']));
   }
   public function field_public_url(){
-    printf('<input type="text" name="ln_publisher[public_url]" value="%s" />', esc_attr($this->options['public_url']));
+    printf('<input type="text" name="ln_publisher[public_url]" value="%s" /><br><label>%s</label>', esc_attr($this->options['public_url']),
+           'URL where Lightning Charge is publicily accessible to users. Optional, defaults to Server URL.');
   }
   public function field_token(){
     printf('<input type="text" name="ln_publisher[api_token]" value="%s" />', esc_attr($this->options['api_token']));
