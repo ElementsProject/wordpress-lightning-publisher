@@ -20,6 +20,10 @@ Powered by :zap: [Lightning Charge](https://github.com/ElementsProject/lightning
 
 4. Under the WordPress administration panel, go to `Settings -> Lightning Publisher` to configure your Lightning Charge server URL and API token.
 
+Note that Lightning Publisher uses Lightning Charge's built-in checkout page (as an iframe),
+meaning that the Lightning Charge server has to be publicly accessible to users.
+If users need to access it using a different URL than the one used for communicating with the API,
+set this under "Public URL" in the settings page.
 
 ## Usage
 
