@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8bc4131a3e736da2216289b90f634f5c",
-    "content-hash": "d1b062dd29555a6d74a4f3497c64f78a",
+    "hash": "4ffb42fbc6ad422c7a76d781d3be9429",
+    "content-hash": "3f7ca3980a35b2c1e8946cf012152172",
     "packages": [
         {
             "name": "elementsproject/lightning-charge-client-php",
