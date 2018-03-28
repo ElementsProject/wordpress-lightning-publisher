@@ -6,6 +6,7 @@
     Description: Lightning Publisher for WordPress
     Author:      Blockstream
     Author URI:  https://blockstream.com
+    Tested up to: 4.9.4
 */
 
 if (!defined('ABSPATH')) exit;
