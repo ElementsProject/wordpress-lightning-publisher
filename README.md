@@ -14,11 +14,13 @@ Powered by :zap: [Lightning Charge](https://github.com/ElementsProject/lightning
 
 1. Setup [Lightning Charge](https://github.com/ElementsProject/lightning-charge).
 
-2. [Download wordpress-lightning-publisher.zip](https://github.com/elementsproject/wordpress-lightning-publisher/releases)
+2. Install the [Lightning Publisher for WordPress](https://wordpress.org/plugins/lightning-publisher/) plugin
+   from the WordPress.org plugin directory.
 
-3. Install and enable the plugin on your WordPress installation.
+   Alternatively, you can [download wordpress-lightning-publisher.zip](https://github.com/elementsproject/wordpress-lightning-publisher/releases)
+   and install it manually.
 
-4. Under the WordPress administration panel, go to `Settings -> Lightning Publisher` to configure your Lightning Charge server URL and API token.
+3. Under the WordPress administration panel, go to `Settings -> Lightning Publisher` to configure your Lightning Charge server URL and API token.
 
 Note that Lightning Publisher uses Lightning Charge's built-in checkout page (as an iframe),
 meaning that the Lightning Charge server has to be publicly accessible to users.
