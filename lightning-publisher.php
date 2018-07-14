@@ -1,7 +1,7 @@
 <?php
 /*
     Plugin Name: Lightning Publisher
-    Version:     0.1.7
+    Version:     0.1.8
     Plugin URI:  https://github.com/ElementsProject/wordpress-lightning-publisher
     Description: Lightning Publisher for WordPress
     Author:      Blockstream
