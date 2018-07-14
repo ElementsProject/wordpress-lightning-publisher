@@ -85,7 +85,7 @@ class Lightning_Publisher {
     $invoice = $this->charge->fetch($_POST['invoice_id']);
 
     if (!$invoice)                    return status_header(404);
-    if (!$invoice->completed)         return status_header(402);
+    if ($invoice->status !== 'paid')  return status_header(402);
     if (!$invoice->metadata->post_id) return status_header(500); // should never actually happen
 
     $post_id = $invoice->metadata->post_id;
