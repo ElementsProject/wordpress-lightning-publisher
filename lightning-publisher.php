@@ -123,7 +123,7 @@ class Lightning_Publisher {
    */
   protected static function extract_ifpaid_tag($content) {
     if (!preg_match('/\[ifpaid [\d.]+ [a-z]+.*?\]/i', $content, $m)) return;
-    $tag = html_entity_decode(str_replace('&#8221;', '"', $m[0]));
+    $tag = html_entity_decode(str_replace(array('&#8220;', '&#8221;'), '"', $m[0]));
     if (substr($tag, -2, 1) !== ' ') $tag = substr($tag, 0, -1) . ' ]';
     $attrs = shortcode_parse_atts($tag);
     return (object)[ 'tag' => $m[0], 'amount' => $attrs[1], 'currency' => $attrs[2], 'attrs' => $attrs ];
